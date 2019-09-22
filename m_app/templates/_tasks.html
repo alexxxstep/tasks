@@ -1,0 +1,35 @@
+<ul class="posts">
+    {% for task in tasks %}
+
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="{{ url_for('.user', username=task.author.username) }}">
+                <img class="img-rounded profile-thumbnail" src="{{ task.author.gravatar(size=15) }}">
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date">{{ moment(task.date_created).fromNow() }}</div>
+            <div class="post-author"><a href="{{ url_for('.user', username=task.author.username) }}">{{
+                task.author.username }}</a></div>
+            <div class="post-body">
+                <a href="{{ url_for('.task', id=task.id) }}"><h4>{{ task.title }} ({{task.status}})</h4></a>
+            </div>
+            <div class="post-body">
+
+                <h6>{{ task.body }}</h6>
+            </div>
+            <div class="post-footer">
+                {% if current_user == task.author %}
+                <a href="{{ url_for('.edit', id=task.id) }}">
+                    <span class="label label-primary">Edit</span>
+                </a>
+                {% endif %}
+                <!--                <a href="{{ url_for('.task', id=task.id) }}">-->
+                <!--                    <span class="label label-default">Comment</span>-->
+                <!--                </a>-->
+            </div>
+        </div>
+    </li>
+
+    {% endfor %}
+</ul>

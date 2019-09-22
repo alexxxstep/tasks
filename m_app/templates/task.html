@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Flasky - Task{% endblock %}
+
+{% block page_content %}
+<div>
+    <h4>{{ task.title }}</h4>
+    <div>
+        <a href="{{ url_for('.user', username=task.author.username) }}">{{
+            task.author.username }}
+            <img class="img-rounded profile-thumbnail" src="{{ task.author.gravatar(size=20) }}">
+        </a>
+    </div>
+    <br>
+    <h6>{{ task.body }}</h6>
+    <br>
+    <p>Status: {{ task.status }}</p>
+</div>
+
+<div>
+    {% if current_user.is_authenticated %}
+    {{ wtf.quick_form(form) }}
+    {% endif %}
+</div>
+
+
+<div>
+    <h4>Comments: ({{ n_comments }})</h4>
+</div>
+
+
+<ul class="posts">
+    {% for comment in comments %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="{{ url_for('.user', username=comment.commentator.username) }}">
+                <img class="img-rounded profile-thumbnail" src="{{ comment.commentator.gravatar(size=10) }}">
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date">{{ moment(comment.timestamp).fromNow() }}</div>
+            <div class="post-author"><a href="{{ url_for('.user', username=comment.commentator.username) }}">{{
+                comment.commentator.username }}</a></div>
+            <div class="post-body">
+                <h6>{{ comment.body }}</h6>
+            </div>
+
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}
